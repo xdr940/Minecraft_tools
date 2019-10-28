@@ -1,8 +1,8 @@
 # Minecraft shaders for computer vision
 
  - origin
-![origin](./img/origin1.png)
+![origin](./imgs/origin1.png)
  - normal map
-![normal](./img/normal-map1.png)
+![normal](./imgs/normal-map1.png)
  - depth map
-![depth](./img/depth-map1.png)
+![depth](./imgs/depth-map1.png)
