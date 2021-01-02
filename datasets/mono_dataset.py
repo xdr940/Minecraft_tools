@@ -43,7 +43,7 @@ class MonoDataset(data.Dataset):
                  filenames,
                  height,
                  width,
-                 frame_idxs,
+                 frame_sides,
                  num_scales,
                  is_train=False,
                  img_ext='.png'):
@@ -56,7 +56,7 @@ class MonoDataset(data.Dataset):
         self.num_scales = num_scales
         self.interp = Image.ANTIALIAS
 
-        self.frame_idxs = frame_idxs
+        self.frame_sides = frame_sides
 
         self.is_train = is_train#unsuper train or evaluation
         self.img_ext = img_ext
@@ -72,21 +72,26 @@ class MonoDataset(data.Dataset):
             self.saturation = (0.8, 1.2)
             self.hue = (-0.1, 0.1)
             transforms.ColorJitter.get_params(
-                self.brightness, self.contrast, self.saturation, self.hue)
+                self.brightness,
+                self.contrast,
+                self.saturation,
+                self.hue
+            )
         except TypeError:
             self.brightness = 0.2
             self.contrast = 0.2
             self.saturation = 0.2
             self.hue = 0.1
 
-        self.resize = {}
+        self.resizor = {}
         for i in range(self.num_scales):
             s = 2 ** i
-            self.resize[i] = transforms.Resize((self.height // s, self.width // s),
+            self.resizor[i] = transforms.Resize((self.height // s, self.width // s),
                                                interpolation=self.interp)
 
         self.load_depth = self.check_depth()
         #self.load_depth = False
+
 
 
     #private
@@ -98,18 +103,17 @@ class MonoDataset(data.Dataset):
         same augmentation.
         """
         for k in list(inputs):
-            frame = inputs[k]
             if "color" in k:
-                n, im, i = k
-                for i in range(self.num_scales):
-                    inputs[(n, im, i)] = self.resize[i](inputs[(n, im, i - 1)])
+                type, side, _ = k
+                for scale in range(self.num_scales):
+                    inputs[(type, side, scale)] = self.resizor[scale](inputs[(type, side, scale - 1)])
 
         for k in list(inputs):
             f = inputs[k]
             if "color" in k:
-                n, im, i = k
-                inputs[(n, im, i)] = self.to_tensor(f)
-                inputs[(n + "_aug", im, i)] = self.to_tensor(color_aug(f))
+                type, side, scale= k
+                inputs[(type, side, scale)] = self.to_tensor(f)
+                inputs[(type + "_aug", side, scale)] = self.to_tensor(color_aug(f))
 
     def __len__(self):
         return len(self.filenames)
@@ -142,27 +146,14 @@ class MonoDataset(data.Dataset):
 
         do_color_aug = self.is_train and random.random() > 0.5
         do_flip = self.is_train and random.random() > 0.5
+        do_rotation = self.is_train and random.random()>0.5
 
-        line = self.filenames[index].split()
-        folder = line[0]#pic_path
-
-
-        if len(line) == 3 or len(line)==2:# 2 for monocular files struct
-            frame_index = int(line[1])
-        else:
-            frame_index = 0
+        split_line = self.filenames[index]
 
 
-
-        if len(line) == 3:
-            side = line[2]
-        else:
-            side = None
-
-
-
-        for i in self.frame_idxs:
-            inputs[("color", i, -1)] = self.get_color(folder, frame_index + i, side, do_flip)#inputs得到scale == -1的前 中后三帧
+        #img sides
+        for side in self.frame_sides:
+            inputs[("color", side, -1)] = self.get_color(split_line, side,  do_flip)  # inputs得到scale == -1的前 中后三帧
 
 
 
@@ -190,14 +181,14 @@ class MonoDataset(data.Dataset):
 
 
 
-        for i in self.frame_idxs:
-            del inputs[("color", i, -1)]
-            del inputs[("color_aug", i, -1)]
+        for i in self.frame_sides:
+            del inputs[("color", i, -1)]#删除原分辨率图
+            del inputs[("color_aug", i, -1)]#删除原分辨率曾广图
 
 
 
         if self.load_depth:
-            depth_gt = self.get_depth(folder, frame_index, side, do_flip)
+            depth_gt = self.get_depth(split_line, 0,  do_flip)
             inputs["depth_gt"] = np.expand_dims(depth_gt, 0)
             inputs["depth_gt"] = torch.from_numpy(inputs["depth_gt"].astype(np.float32))
 
@@ -208,12 +199,12 @@ class MonoDataset(data.Dataset):
         return inputs
 
 
-    #多态
-    def get_color(self, folder, frame_index, side, do_flip):
+    #多态, 继承类用
+    def get_color(self, folder, frame_index, do_flip):
         raise NotImplementedError
 
     def check_depth(self):
         raise NotImplementedError
 
-    def get_depth(self, folder, frame_index, side, do_flip):
+    def get_depth(self, folder, frame_index, do_flip):
         raise NotImplementedError

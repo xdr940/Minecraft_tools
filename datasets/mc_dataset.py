@@ -52,16 +52,14 @@ class MCDataset(MonoDataset):
 
     def check_depth(self):
 
-        line = self.filenames[0].split()
-        scene_name = line[0]
-        frame_index = int(line[1])
+        traj_name,shader,frame = self.relpath_split(self.filenames[0])
 
-        depth_filename =Path(self.data_path)/scene_name/"depth"/"{:04d}.png".format(int(frame_index))
+        depth_filename =Path(self.data_path)/traj_name/"depth"/"{:05d}.jpg".format(int(frame))
 
         return depth_filename.exists()
 
-    def get_color(self, folder, frame_index, side, do_flip):
-        path =self.__get_image_path__(folder, frame_index)
+    def get_color(self, folder, side, do_flip):
+        path =self.__get_image_path__(folder, side)
         color = self.loader(path)
 
         if do_flip:
@@ -69,16 +67,17 @@ class MCDataset(MonoDataset):
 
         return color
 
-
-    def __get_image_path__(self, folder, frame_index):
-        f_str = "{:04d}{}".format(frame_index, self.img_ext)
-        image_path = Path(self.data_path)/ folder/"color/{}".format(f_str)
+    def __get_image_path__(self, folder, side):
+        traj,shader,frame = self.relpath_split(folder)
+        reframe = "{:05d}".format(int(frame)+side)
+        folder=folder.replace(frame,reframe)
+        image_path = Path(self.data_path)/ folder
         return image_path
 
 
 
-    def get_depth(self, folder, frame_index, side, do_flip):
-        path = self.__get_depth_path__(folder, frame_index)
+    def get_depth(self, folder, side,  do_flip):
+        path = self.__get_depth_path__(folder, side)
         depth_gt = plt.imread(path)
         depth_gt = skimage.transform.resize(depth_gt, self.full_res_shape[::-1], order=0, preserve_range=True, mode='constant')
 
@@ -86,7 +85,20 @@ class MCDataset(MonoDataset):
             depth_gt = np.fliplr(depth_gt)
         return depth_gt#[0~1]
 
-    def __get_depth_path__(self, folder, frame_index):
-        f_str = "{:04d}{}".format(frame_index, self.img_ext)
-        depth_path = Path(self.data_path) / folder / "depth/{}".format(f_str)
+    def __get_depth_path__(self, folder, side):
+
+        traj, shader, frame = self.relpath_split(folder)
+        reframe = "{:05d}".format(int(frame) + side)
+        folder = folder.replace(frame, reframe)
+        folder = folder.replace(shader,'depth')
+        depth_path = Path(self.data_path) / folder
         return depth_path
+
+
+    def relpath_split(self,relpath):
+        relpath = relpath.split('/')
+        traj_name=relpath[0]
+        shader = relpath[1]
+        frame = relpath[2]
+        frame=frame.replace('.jpg','')
+        return traj_name, shader, frame

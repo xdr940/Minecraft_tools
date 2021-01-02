@@ -24,7 +24,7 @@ class MCOptions:
                                  default="/home/roit/datasets/MC")
         self.parser.add_argument("--height", default=600)
         self.parser.add_argument("--width", default=800)
-        self.parser.add_argument("--frame_idxs",default=[-1,0,1])
+        self.parser.add_argument("--frame_sides",default=[-1,0,1])
         self.parser.add_argument("--scales",default=[0,1,2,3])
 
         self.parser.add_argument("--batch_size",default=1)

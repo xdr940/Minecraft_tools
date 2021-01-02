@@ -42,7 +42,11 @@ def shader_fileter(shaders):
             ret . append(shader)
     return ret
 def file_fileter(files):
-    return files
+    ret=[]
+    for file in files:
+        if int(file.stem)>2 and int(file.stem)<len(files)-2:
+            ret.append(file)
+    return ret
 
 
 
