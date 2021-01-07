@@ -34,10 +34,12 @@ def main(opts):
     train_dataset = MCDataset(
         data_path=opts.data_path,
         filenames=train_filenames,
+        is_train=True,
         height=opts.height,
         width=opts.width,
         frame_sides=[-1,0,1],
         num_scales=len(opts.scales)
+
     )
 
     dataloader = DataLoader(

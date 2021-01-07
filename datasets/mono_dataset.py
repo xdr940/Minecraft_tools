@@ -113,7 +113,8 @@ class MonoDataset(data.Dataset):
             if "color" in k:
                 type, side, scale= k
                 inputs[(type, side, scale)] = self.to_tensor(f)
-                inputs[(type + "_aug", side, scale)] = self.to_tensor(color_aug(f))
+                if scale<=0:
+                    inputs[(type + "_aug", side, scale)] = self.to_tensor(color_aug(f))
 
     def __len__(self):
         return len(self.filenames)
