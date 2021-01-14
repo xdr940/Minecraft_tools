@@ -9,8 +9,8 @@ import cv2
 import numpy as np
 
 parser = argparse.ArgumentParser(description="Video2Frames converter")
-parser.add_argument('--input', default='/home/roit/bluep2/datasets/mcvideo1024768/-400,-400', help="Input video file")
-parser.add_argument('--output', default="/home/roit/datasets/mc", help="Output folder. If exists it will be removed")
+parser.add_argument('--input', default='/home/roit/bluep2/datasets/mcvideo1024768/dolly', help="Input video file")
+parser.add_argument('--output', default="/home/roit/datasets/mcv3", help="Output folder. If exists it will be removed")
 parser.add_argument('--videos2frames_log',
                     default='./videos2frames_log.txt',
                     )

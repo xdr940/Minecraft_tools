@@ -44,7 +44,7 @@ def shader_fileter(shaders):
 def file_fileter(files):
     ret=[]
     for file in files:
-        if int(file.stem)>2 and int(file.stem)<len(files)-2:
+        if int(file.stem)>=2 and int(file.stem)<=len(files)-2:
             ret.append(file)
     return ret
 
@@ -55,9 +55,13 @@ def parse_args():
         description='Simple testing funtion for Monodepthv2 models.')
 
     parser.add_argument('--dataset_path', type=str,default='/home/roit/datasets/mc',help='path to a test image or folder of images')
-    parser.add_argument("--num",default=100,type=str)
-    parser.add_argument("--proportion",default=[0.7,0.2,0.1],help="train, val, test")
-    parser.add_argument("--out_name",default=None)
+    parser.add_argument("--num",
+                        #default=1000,
+                        default=None
+                        )
+    parser.add_argument("--proportion",default=[0.9,0.05,0.05],help="train, val, test")
+    parser.add_argument("--rand_seed",default=12345)
+    parser.add_argument("--out_dir",default='../splits/sildurs-12345')
 
     return parser.parse_args()
 def main(args):
@@ -74,7 +78,7 @@ def main(args):
 
 
 
-    out_dir = Path("../mc")
+    out_dir = Path(args.out_dir)
     out_dir.mkdir_p()
     train_txt_p = out_dir/'train.txt'
     val_txt_p = out_dir/'val.txt'
@@ -100,10 +104,9 @@ def main(args):
             files.sort()
             files = file_fileter(files)
             item_list+=files
-
-
+    random.seed(args.rand_seed)
     random.shuffle(item_list)
-    if out_num>len(item_list):
+    if out_num and out_num<len(item_list):
         item_list=item_list[:out_num]
 
     for i in range(len(item_list)):
