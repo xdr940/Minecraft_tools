@@ -52,16 +52,16 @@ def file_fileter(files):
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description='Simple testing funtion for Monodepthv2 models.')
+        description='MineNav dataset split for training ,validation and test')
 
-    parser.add_argument('--dataset_path', type=str,default='/home/roit/datasets/mc',help='path to a test image or folder of images')
+    parser.add_argument('--dataset_path', type=str,default='/home/roit/datasets/mcv3',help='path to a test image or folder of images')
     parser.add_argument("--num",
-                        #default=1000,
-                        default=None
+                        default=500,
+                        #default=None
                         )
     parser.add_argument("--proportion",default=[0.9,0.05,0.05],help="train, val, test")
     parser.add_argument("--rand_seed",default=12345)
-    parser.add_argument("--out_dir",default='../splits/sildurs-12345')
+    parser.add_argument("--out_dir",default='../splits/mcv3-sildurs-12345-lite')
 
     return parser.parse_args()
 def main(args):

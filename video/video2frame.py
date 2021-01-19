@@ -14,8 +14,8 @@ import cv2
 import numpy as np
 
 parser = argparse.ArgumentParser(description="Video2Frames converter")
-parser.add_argument('--input', default='/home/roit/bluep2/datasets/mcvideo1024768/dolly/m300_sildurs-mbl.mp4', help="Input video file")
-parser.add_argument('--output', default='/home/roit/bluep2/datasets/mcvideo1024768/dolly/m300_sildurs-mbl', help="Output folder. If exists it will be removed")
+parser.add_argument('--input', default='/home/roit/bluep2/datasets/mcvideo1024768/dolly/m100x_depth', help="Input video file")
+parser.add_argument('--output', default='/home/roit/bluep2/datasets/mcvideo1024768/dolly/splits', help="Output folder. If exists it will be removed")
 parser.add_argument('--skip',default=1,help="minimum 1 is normal")
 parser.add_argument('--ext',default='png')
 parser.add_argument('--rotate', type=int, default=0, choices={0,90, 180, 270}, help="Rotate clock-wise output frames")

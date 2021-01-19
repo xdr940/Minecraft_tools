@@ -11,9 +11,9 @@ from path import Path
 from tqdm import tqdm
 import os
 parser = argparse.ArgumentParser(description="Video2Frames converter")
-parser.add_argument('--input_dir', default='/home/roit/bluep2/datasets/mcvideo1024768/dolly/m300_sildurs', help="Input video file")
+parser.add_argument('--input_dir', default='/home/roit/bluep2/datasets/mcvideo1024768/dolly/m100x_sildurs-h', help="Input video file")
+parser.add_argument('--shader',default='m100x_sildurs')
 parser.add_argument('--output_dir', default="/home/roit/bluep2/datasets/mcvideo1024768/dolly/splits", help="Output folder. If exists it will be removed")
-parser.add_argument('--shader',default='sildurs')
 parser.add_argument('--videos2frames_log',
                     #default='./videos2frames_log.txt',
                     default=None
@@ -44,7 +44,7 @@ def main(args):
         dst_dir = output_dir/sub_dir
         dst_dir.mkdir_p()
         dst_name = dst_dir/"{:04d}.png".format(sub_name)
-        command = "cp {} {}".format(file,dst_name)
+        command = "mv {} {}".format(file,dst_name)
         os.system(command)
 
 
