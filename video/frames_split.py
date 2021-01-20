@@ -11,8 +11,8 @@ from path import Path
 from tqdm import tqdm
 import os
 parser = argparse.ArgumentParser(description="Video2Frames converter")
-parser.add_argument('--input_dir', default='/home/roit/bluep2/datasets/mcvideo1024768/dolly/m100x_sildurs-h', help="Input video file")
-parser.add_argument('--shader',default='m100x_sildurs')
+parser.add_argument('--input_dir', default='/home/roit/bluep2/datasets/mcvideo1024768/dolly/300x_sildurs-h', help="Input video file")
+parser.add_argument('--shader',default=None)
 parser.add_argument('--output_dir', default="/home/roit/bluep2/datasets/mcvideo1024768/dolly/splits", help="Output folder. If exists it will be removed")
 parser.add_argument('--videos2frames_log',
                     #default='./videos2frames_log.txt',
@@ -36,10 +36,15 @@ def main(args):
     output_dir = Path(args.output_dir)
     output_dir.mkdir_p()
 
+    if args.shader:
+        shader = args.shader
+    else:
+        shader = input_dir.stem
+
     print("--> {} frames".format(len(src_files)))
 
     for idx, file in tqdm(enumerate(src_files)):
-        sub_dir = idx2sub_dir(idx,basename=args.shader)
+        sub_dir = idx2sub_dir(idx,basename=shader)
         sub_name = idx%args.framesPerDir
         dst_dir = output_dir/sub_dir
         dst_dir.mkdir_p()

@@ -10,45 +10,122 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 # Opencv
 import cv2
+from threading import Lock,Thread
+
 import numpy as np
 
 parser = argparse.ArgumentParser(description="Video2Frames converter")
-parser.add_argument('--input', default='/home/roit/bluep2/datasets/mcvideo1024768/dolly/m100x_sildurs-h.mp4', help="Input video file")
-parser.add_argument('--output', default='/home/roit/bluep2/datasets/mcvideo1024768/dolly/m100x_sildurs-h', help="Output folder. If exists it will be removed")
-parser.add_argument('--ext',default='png')
+parser.add_argument('--input_video', default='/home/roit/bluep2/datasets/mcvideo1024768/dolly/300x_sildurs-h.mp4', help="Input video file")
+parser.add_argument('--out_dir',
+                    default=None,
+                    #default='/home/roit/bluep2/datasets/mcvideo1024768/dolly/0x_sildurs-h',
+                    help="Output folder. If exists it will be removed")
+parser.add_argument('--save_ext',default='png')
 
 args = parser.parse_args()
 
-def main():
-    global args
-
-    #io check
-    root = Path(args.input)
-    print(root)
-
-    in_path = Path(args.input)
-    if not in_path.exists():
-        parser.error("Input video file is not found")
-        return 1
-    if args.output:
-        out_path = Path(args.output)
-    else:
-        out_path = Path(in_path.stem)
-
-    out_path.makedirs_p()  # without exception 'already exist'
+from blessings import Terminal
 
 
+class Writer(object):
+    """Create an object with a write method that writes to a
+    specific place on the screen, defined at instantiation.
+
+    This is the glue between blessings and progressbar.
+    """
+
+    def __init__(self, location):
+        """
+        Input: location - tuple of ints (x, y), the position
+                        of the bar in the terminal
+        """
+        self.location = location
+        self.t = Terminal()
+
+    def write(self, string):
+        with self.t.location(*self.location):
+            sys.stdout.write("\033[K")
+            print(string)
+
+    def flush(self):
+        return
+
+
+class Video2Frame():
+    def __init__(self,input_video,out_dir,save_ext):
+        self.input_video = Path(input_video)
+        if not self.input_video.exists():
+            parser.error("video not exists")
+        else:
+            print('--> split {}'.format(input_video))
+        if out_dir:
+            self.out_dir=Path(out_dir)
+        else:
+            self.out_dir = self.input_video.parent/self.input_video.stem
+            print("--> out_dir mkd as {}".format(self.out_dir))
+        self.out_dir.mkdir_p()
+        self.cap = cv2.VideoCapture()
+        self.cap.open(self.input_video)
+        if not self.cap.isOpened():
+            parser.error("Failed to open input video")
+            return
+
+        self.nums_frame = self.cap.get(cv2.CAP_PROP_FRAME_COUNT)  # 视频最大能切分几张
+        self.IS_RUNNING=True
+        self.lock = Lock()
+        self.frameCount=0
+        self.frame_list = []
+        self.writer= Writer((0,10))
+        pass
+
+    def capture(self):
+
+        while(True):  # for frameId in tqdm(range(int(frameCount))):
+            try:
+                ret, frame = self.cap.read()
+                self.frame_list.append(frame.copy())
+
+            # print frameId, ret, frame.shape
+            except:
+                print("Failed to get the frame {f}".format(f=self.frameCount))
+                break
+
+        self.IS_RUNNING=False
+        print('frame split over')
+
+    def figsave(self):
+
+        while(self.frameCount< self.nums_frame):
+            self.lock.acquire()
+            ofname = self.out_dir / '{:04d}.{}'.format(self.frameCount, args.save_ext)  # 补零操作
+            ret = cv2.imwrite(ofname, self.frame_list[0])
+            self.frame_list.pop(0)
+            self.frameCount += 1
+            #self.writer.write('save {}'.format(self.frameCount))
+            #print('save {}'.format(self.frameCount))
+            self.lock.release()
+
+
+        pass
+
+    def run(self):
+        print("--> frame num :{}".format(self.nums_frame))
+        t1 = Thread(target=self.capture())
+
+        t2 = Thread(target=self.figsave())
 
 
 
 
-    cap = cv2.VideoCapture()
-    cap.open(args.input)
-    if not cap.isOpened():
-        parser.error("Failed to open input video")
-        return 1
+        t1.start()
+        t2.start()
 
-    frameCount = cap.get(cv2.CAP_PROP_FRAME_COUNT)#视频最大能切分几张
+
+
+
+
+
+
 
 
     #maxframes = args.maxframes
@@ -61,28 +138,15 @@ def main():
     #    skipDelta = 1
 
 
-    f_cnt = 1#output num of frames
-    for  frameId in tqdm(range(int(frameCount))) :    #for frameId in tqdm(range(int(frameCount))):
-
-        ret, frame = cap.read()
-        # print frameId, ret, frame.shape
-        if not ret:
-            print("Failed to get the frame {f}".format(f=frameId))
-            continue
 
 
 
-        ofname = out_path/'{:04d}.{}'.format(frameId,args.ext)#补零操作
-        ret = cv2.imwrite(ofname, frame)
-        if not ret:
-            print("Failed to write the frame {f}".format(f=frameId))
-            continue
 
-        cap.set(cv2.CAP_PROP_POS_FRAMES, frameId)
-
-
+    pass
 
 
 if __name__ == "__main__":
     print("Start Video2Frames script ...")
-    ret = main()
+    video2frame = Video2Frame(input_video=args.input_video,out_dir=args.out_dir,save_ext=args.save_ext)
+    video2frame.run()
+    print('programe over')

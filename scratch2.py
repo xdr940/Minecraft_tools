@@ -1,8 +1,7 @@
 
+a = [2,3,4,5,56]
 
-
-import matplotlib.pyplot as plt
-
-img = plt.imread('/home/roit/datasets/mc/[rz2,x,y][0,45,0][0,0,150]/depth/00002.png')
-plt.imshow(img)
-plt.show()
+a.pop(0)
+print(a)
+a.append(123)
+print(a)
