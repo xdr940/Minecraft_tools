@@ -2,7 +2,7 @@
 from path import Path
 
 def main():
-    data_path = Path('/home/roit/datasets/mcv3')
+    data_path = Path('/home/roit/datasets/mcv1')
     dirs =data_path.dirs()
     dirs.sort()
     shaders ={}

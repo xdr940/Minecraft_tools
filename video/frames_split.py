@@ -11,22 +11,22 @@ from path import Path
 from tqdm import tqdm
 import os
 parser = argparse.ArgumentParser(description="Video2Frames converter")
-parser.add_argument('--input_dir', default='/home/roit/bluep2/datasets/mcvideo1024768/dolly/300x_sildurs-h', help="Input video file")
-parser.add_argument('--shader',default=None)
-parser.add_argument('--output_dir', default="/home/roit/bluep2/datasets/mcvideo1024768/dolly/splits", help="Output folder. If exists it will be removed")
+parser.add_argument('--input_dir', default='/home/roit/bluep2/datasets/mcv4videos/4_sildurs-h', help="Input video file")
+parser.add_argument('--shader',default='sildurs-h')
+parser.add_argument('--output_dir', default="/home/roit/bluep2/datasets/mcv4videos/split", help="Output folder. If exists it will be removed")
 parser.add_argument('--videos2frames_log',
                     #default='./videos2frames_log.txt',
                     default=None
                     )
-parser.add_argument('--offset',default=50,help='frames num of the first dir')
-parser.add_argument('--framesPerDir',default=50,help='frames num of the other dirs')
+parser.add_argument('--operation',default='mv',choices=['cp','mv'])
+parser.add_argument('--framesPerDir',default=100,help='frames num of the other dirs')
 parser.add_argument('--base_name',default='')
 
 parser.add_argument('--resize',default=False)
 
-def idx2sub_dir(idx,basename='depth',offset=50):
-    num = int(idx/offset)
-    return basename+"{:04d}".format(num)
+def idx2sub_dir(idx,shader,framesPerDir):
+    num = int(idx/framesPerDir)
+    return shader+"{:04d}".format(num)
 
 def main(args):
 
@@ -44,12 +44,12 @@ def main(args):
     print("--> {} frames".format(len(src_files)))
 
     for idx, file in tqdm(enumerate(src_files)):
-        sub_dir = idx2sub_dir(idx,basename=shader)
-        sub_name = idx%args.framesPerDir
+        sub_dir = idx2sub_dir(idx,shader=shader,framesPerDir=args.framesPerDir)
+        frame_name = idx%args.framesPerDir
         dst_dir = output_dir/sub_dir
         dst_dir.mkdir_p()
-        dst_name = dst_dir/"{:04d}.png".format(sub_name)
-        command = "mv {} {}".format(file,dst_name)
+        dst_name = dst_dir/"{:04d}.png".format(frame_name)
+        command = "{} {} {}".format(args.operation,file,dst_name)
         os.system(command)
 
 

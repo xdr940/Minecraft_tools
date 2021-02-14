@@ -15,10 +15,10 @@ from threading import Lock,Thread
 import numpy as np
 
 parser = argparse.ArgumentParser(description="Video2Frames converter")
-parser.add_argument('--input_video', default='/home/roit/bluep2/datasets/mcvideo1024768/dolly/300x_sildurs-h.mp4', help="Input video file")
+parser.add_argument('--input_video', default='/home/roit/bluep2/datasets/mcv4videos/4_sildurs-h.mp4', help="Input video file")
 parser.add_argument('--out_dir',
                     default=None,
-                    #default='/home/roit/bluep2/datasets/mcvideo1024768/dolly/0x_sildurs-h',
+                    #default='/home/roit/bluep2/datasets/mcv4video/00_raw',
                     help="Output folder. If exists it will be removed")
 parser.add_argument('--save_ext',default='png')
 

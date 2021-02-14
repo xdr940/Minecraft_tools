@@ -44,7 +44,7 @@ def shader_fileter(shaders):
 def file_fileter(files):
     ret=[]
     for file in files:
-        if int(file.stem)>=2 and int(file.stem)<=len(files)-2:
+        if int(file.stem)>=4 and int(file.stem)<=len(files)-4:
             ret.append(file)
     return ret
 
@@ -54,14 +54,14 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description='MineNav dataset split for training ,validation and test')
 
-    parser.add_argument('--dataset_path', type=str,default='/home/roit/datasets/mcv3',help='path to a test image or folder of images')
+    parser.add_argument('--dataset_path', type=str,default='/home/roit/datasets/mcv1',help='path to a test image or folder of images')
     parser.add_argument("--num",
-                        default=500,
+                        default=2000,
                         #default=None
                         )
-    parser.add_argument("--proportion",default=[0.9,0.05,0.05],help="train, val, test")
+    parser.add_argument("--proportion",default=[0.85,0.1,0.05],help="train, val, test")
     parser.add_argument("--rand_seed",default=12345)
-    parser.add_argument("--out_dir",default='../splits/mcv3-sildurs-12345-lite')
+    parser.add_argument("--out_dir",default='../splits/mcv1-sildurs-2k-12345')
 
     return parser.parse_args()
 def main(args):
@@ -117,7 +117,7 @@ def main(args):
     val_bound = int(length * args.proportion[1]) + train_bound
     test_bound = int(length * args.proportion[2]) + val_bound
 
-
+    print(" train items:{}\n val items:{}\n test items:{}".format(len(item_list[:train_bound]), len(item_list[train_bound:val_bound]), len(item_list[val_bound:test_bound])))
     writelines(item_list[:train_bound],train_txt_p)
     writelines(item_list[train_bound:val_bound],val_txt_p)
     writelines(item_list[val_bound:test_bound],test_txt_p)
