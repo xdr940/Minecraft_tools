@@ -11,15 +11,15 @@ from path import Path
 from tqdm import tqdm
 import os
 parser = argparse.ArgumentParser(description="Video2Frames converter")
-parser.add_argument('--input_dir', default='/home/roit/bluep2/datasets/mcv4videos/4_sildurs-h', help="Input video file")
-parser.add_argument('--shader',default='sildurs-h')
-parser.add_argument('--output_dir', default="/home/roit/bluep2/datasets/mcv4videos/split", help="Output folder. If exists it will be removed")
+parser.add_argument('--input_dir', default='/home/roit/bluep2/datasets/mcv5/depth/0xm300_depth', help="Input video file")
+parser.add_argument('--shader',default='')
+parser.add_argument('--output_dir', default="/home/roit/bluep2/datasets/mcv5/depth/0xm300_depth-dirs", help="Output folder. If exists it will be removed")
 parser.add_argument('--videos2frames_log',
                     #default='./videos2frames_log.txt',
                     default=None
                     )
 parser.add_argument('--operation',default='mv',choices=['cp','mv'])
-parser.add_argument('--framesPerDir',default=100,help='frames num of the other dirs')
+parser.add_argument('--framesPerDir',default=50,help='frames num of the other dirs')
 parser.add_argument('--base_name',default='')
 
 parser.add_argument('--resize',default=False)
@@ -29,7 +29,7 @@ def idx2sub_dir(idx,shader,framesPerDir):
     return shader+"{:04d}".format(num)
 
 def main(args):
-
+    print(args.input_dir)
     input_dir = Path(args.input_dir)
     src_files = input_dir.files()
     src_files.sort()
@@ -58,7 +58,7 @@ def main(args):
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    print("Start splits frames ...")
+    print("Start splits frames to dirs...")
     ret = main(args)
     exit(ret)
 

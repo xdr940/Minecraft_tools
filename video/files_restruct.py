@@ -4,16 +4,28 @@ import os
 from path import Path
 
 def mkdirs():
-    start = 5
-    base_path = Path("/home/roit/datasets/mcv4")
-    for i in range(start,start+20):
-        cmd = "mkdir "+base_path/"{:04d}".format(i)
+    start = 72
+    base_path = Path("/home/roit/bluep2/datasets/mcv5dst")
+    for i in range(start,start+9):
+        cmd = "mkdir "+base_path/"{:04d}s".format(i)
+        print(cmd)
+        os.system(cmd)
+        cmd = "mkdir " + base_path / "{:04d}w".format(i)
         print(cmd)
         os.system(cmd)
 
+        cmd = "mkdir " + base_path / "{:04d}n".format(i)
+        print(cmd)
+        os.system(cmd)
+
+        cmd = "mkdir " + base_path / "{:04d}e".format(i)
+        print(cmd)
+        os.system(cmd)
+
+
 def mvdirs():
-    shader="sildurs-h"
-    start=20
+    shader="sildurs-night"
+    start=168
     base_path = Path("/home/roit/bluep2/datasets/mcv4videos/split")
 
     src_dirs = base_path.dirs()
@@ -43,8 +55,8 @@ def rmdirs():
     pass
 
 if __name__ == '__main__':
-    #mkdirs()
-    mvdirs()
+    mkdirs()
+    # mvdirs()
     #rmdirs()
 
 

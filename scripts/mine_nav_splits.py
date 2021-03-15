@@ -11,10 +11,16 @@
 from path import Path
 from random import random
 import argparse
-
+import pandas as pd
 import random
 
-
+def relpath_split(relpath):
+    relpath = relpath.split('/')
+    traj_name=relpath[0]
+    shader = relpath[1]
+    frame = relpath[2]
+    frame=frame.replace('.png','')
+    return traj_name, shader, frame
 
 def writelines(list,path):
     lenth = len(list)
@@ -38,15 +44,24 @@ def sence_fileter(sences):
 def shader_fileter(shaders):
     ret = []
     for shader in shaders:
-        if shader.stem in ['sildurs']:
+        if shader.stem in ['sildurs-e']:
             ret . append(shader)
     return ret
-def file_fileter(files):
+def file_fileter(dataset_path,files,ref_df=None):
     ret=[]
     for file in files:
         if int(file.stem)>=4 and int(file.stem)<=len(files)-4:
-            ret.append(file)
+            if type(ref_df)==type(None):
+                ret.append(file)
+
+            else:
+                scene, shader, frame = relpath_split(file.relpath(dataset_path))
+                if ref_df.loc[scene + '_' + shader][int(frame)] == 1:
+                    ret.append(file)
     return ret
+
+def table_fileter(files):
+    pass
 
 
 
@@ -54,14 +69,18 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description='MineNav dataset split for training ,validation and test')
 
-    parser.add_argument('--dataset_path', type=str,default='/home/roit/datasets/mcv1',help='path to a test image or folder of images')
+    parser.add_argument('--dataset_path', type=str,default='/home/roit/datasets/mcv5',help='path to a test image or folder of images')
     parser.add_argument("--num",
                         default=2000,
                         #default=None
                         )
+    parser.add_argument('--reference',
+                        # default=None,
+                        default='./selection.csv',
+                        help='selection table for filtering')
     parser.add_argument("--proportion",default=[0.85,0.1,0.05],help="train, val, test")
     parser.add_argument("--rand_seed",default=12345)
-    parser.add_argument("--out_dir",default='../splits/mcv1-sildurs-2k-12345')
+    parser.add_argument("--out_dir",default='../splits/mcv5-sildurs-e-2k-12345-s')
 
     return parser.parse_args()
 def main(args):
@@ -75,6 +94,13 @@ def main(args):
     if train_+val_+test_-1.>0.01:#delta
         print('erro')
         return
+
+    if args.reference:
+        ref_df = pd.read_csv(args.reference,index_col='scences')
+        print('load refs ok')
+    else:
+        ref_df=None
+
 
 
 
@@ -102,8 +128,12 @@ def main(args):
         for shader in shaders:
             files = shader.files()
             files.sort()
-            files = file_fileter(files)
+            files = file_fileter(args.dataset_path,files,ref_df)
             item_list+=files
+
+
+
+    #list constructed
     random.seed(args.rand_seed)
     random.shuffle(item_list)
     if out_num and out_num<len(item_list):

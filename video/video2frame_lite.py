@@ -15,7 +15,7 @@ from threading import Lock,Thread
 import numpy as np
 
 parser = argparse.ArgumentParser(description="Video2Frames converter")
-parser.add_argument('--input_video', default='/home/roit/bluep2/datasets/mcv4videos/4_sildurs-h.mp4', help="Input video file")
+parser.add_argument('--input_video', default='/home/roit/Desktop/33e.mp4', help="Input video file")
 parser.add_argument('--out_dir',
                     default=None,
                     #default='/home/roit/bluep2/datasets/mcv4video/00_raw',
@@ -70,7 +70,7 @@ class Video2Frame():
             parser.error("Failed to open input video")
             return
 
-        self.nums_frame = self.cap.get(cv2.CAP_PROP_FRAME_COUNT)  # 视频最大能切分几张
+        self.nums_frame = self.cap.get(cv2.CAP_PROP_FRAME_COUNT)
         self.IS_RUNNING=True
         self.lock = Lock()
         self.frameCount=0
@@ -97,7 +97,7 @@ class Video2Frame():
 
         while(self.frameCount< self.nums_frame):
             self.lock.acquire()
-            ofname = self.out_dir / '{:04d}.{}'.format(self.frameCount, args.save_ext)  # 补零操作
+            ofname = self.out_dir / '{:04d}.{}'.format(self.frameCount, args.save_ext)
             ret = cv2.imwrite(ofname, self.frame_list[0])
             self.frame_list.pop(0)
             self.frameCount += 1
