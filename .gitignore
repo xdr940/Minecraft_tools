@@ -3,3 +3,4 @@ __pycache__
 splits
 *.jpg
 *.png
+*.csv
