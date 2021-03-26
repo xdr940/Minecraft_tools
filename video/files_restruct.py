@@ -24,8 +24,8 @@ def mkdirs():
 
 
 def mvdirs():
-    shader="sildurs-night"
-    start=168
+    shader="sildurs-e-9k"
+    start=0
     base_path = Path("/home/roit/bluep2/datasets/mcv4videos/split")
 
     src_dirs = base_path.dirs()
@@ -55,8 +55,8 @@ def rmdirs():
     pass
 
 if __name__ == '__main__':
-    mkdirs()
-    # mvdirs()
+    # mkdirs()
+    mvdirs()
     #rmdirs()
 
 

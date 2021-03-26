@@ -56,6 +56,7 @@ def file_fileter(dataset_path,files,ref_df=None):
 
             else:
                 scene, shader, frame = relpath_split(file.relpath(dataset_path))
+                shader='sildurs-e'#这里替换一下, 通过sildurs-e的文件作用于mbl
                 if ref_df.loc[scene + '_' + shader][int(frame)] == 1:
                     ret.append(file)
     return ret
@@ -69,18 +70,18 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description='MineNav dataset split for training ,validation and test')
 
-    parser.add_argument('--dataset_path', type=str,default='/home/roit/datasets/mcv5',help='path to a test image or folder of images')
+    parser.add_argument('--dataset_path', type=str,default='/home/roit/bluep2/datasets/mcrandom',help='path to a test image or folder of images')
     parser.add_argument("--num",
                         default=2000,
                         #default=None
                         )
     parser.add_argument('--reference',
-                        # default=None,
-                        default='./selection.csv',
+                        default=None,
+                        # default='./selection.csv',
                         help='selection table for filtering')
     parser.add_argument("--proportion",default=[0.85,0.1,0.05],help="train, val, test")
     parser.add_argument("--rand_seed",default=12345)
-    parser.add_argument("--out_dir",default='../splits/mcv5-sildurs-e-2k-12345-s')
+    parser.add_argument("--out_dir",default='../splits/random-sildurs-e-2k-12345')
 
     return parser.parse_args()
 def main(args):

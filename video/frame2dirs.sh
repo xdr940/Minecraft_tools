@@ -1,60 +1,45 @@
 
-# python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/depth/300x0_depth \
-# 					--output_dir /home/roit/bluep2/datasets/mcv5videos/depth/300x0_depth
 
+#b0
+python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/rain/0x0_rain \
+--output_dir /home/roit/bluep2/datasets/mcv5videos/rain/0x0_rain
 
-# python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/depth/300x300_depth \
-# 					--output_dir /home/roit/bluep2/datasets/mcv5videos/depth/300x300_depth
+#1
+python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/rain/0x300_rain \
+--output_dir /home/roit/bluep2/datasets/mcv5videos/rain/0x300_rain
 
+#2
+python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/rain/300x300_rain \
+ 					--output_dir /home/roit/bluep2/datasets/mcv5videos/rain/300x300_rain
 
-# python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/depth/300xm300_depth \
-# 					--output_dir /home/roit/bluep2/datasets/mcv5videos/depth/300xm300_depth
+#3
+python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/rain/300x0_rain \
+ 					--output_dir /home/roit/bluep2/datasets/mcv5videos/rain/300x0_rain
 
-# python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/depth/m300x0_depth \
-# 					--output_dir /home/roit/bluep2/datasets/mcv5videos/depth/m300x0_depth
+#4
+python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/rain/300xm300_rain \
+ 					--output_dir /home/roit/bluep2/datasets/mcv5videos/rain/300xm300_rain
 
-# python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/depth/m300x300_depth \
-# 					--output_dir /home/roit/bluep2/datasets/mcv5videos/depth/m300x300_depth
+#5
+python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/rain/0xm300_rain \
+--output_dir /home/roit/bluep2/datasets/mcv5videos/rain/0xm300_rain
 
-# python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/depth/m300xm300_depth \
-# 					--output_dir /home/roit/bluep2/datasets/mcv5videos/depth/m300xm300_depth
+#6
+python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/rain/m300xm300_rain \
+ 					--output_dir /home/roit/bluep2/datasets/mcv5videos/rain/m300xm300_rain
 
+#7
+python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/rain/m300x0_rain \
+ 					--output_dir /home/roit/bluep2/datasets/mcv5videos/rain/m300x0_rain
 
-
-#raw
-
-
-python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/raw/m300xm300_raw \
-					--output_dir /home/roit/bluep2/datasets/mcv5videos/raw/m300xm300_raw
-
-python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/raw/m300x0_raw \
-					--output_dir /home/roit/bluep2/datasets/mcv5videos/raw/m300x0_raw
-
-python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/raw/m300x300_raw \
-					--output_dir /home/roit/bluep2/datasets/mcv5videos/raw/m300x300_raw
-
-
-python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/raw/0xm300_raw \
-					--output_dir /home/roit/bluep2/datasets/mcv5videos/raw/0xm300_raw
-
-python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/raw/0x0_raw \
-					--output_dir /home/roit/bluep2/datasets/mcv5videos/raw/0x0_raw
-
-python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/raw/0x300_raw \
-					--output_dir /home/roit/bluep2/datasets/mcv5videos/raw/0x300_raw
+#8
+python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/rain/m300x300_rain \
+ 					--output_dir /home/roit/bluep2/datasets/mcv5videos/rain/m300x300_rain
 
 
 
 
-python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/raw/300xm300_raw \
-					--output_dir /home/roit/bluep2/datasets/mcv5videos/raw/300xm300_raw
 
-python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/raw/300x0_raw \
-					--output_dir /home/roit/bluep2/datasets/mcv5videos/raw/300x0_raw
-
-
-python frames2dirs.py --input_dir /home/roit/bluep2/datasets/mcv5videos/raw/300x300_raw \
-					--output_dir /home/roit/bluep2/datasets/mcv5videos/raw/300x300_raw
 
 
 

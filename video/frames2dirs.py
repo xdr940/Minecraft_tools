@@ -11,9 +11,9 @@ from path import Path
 from tqdm import tqdm
 import os
 parser = argparse.ArgumentParser(description="Video2Frames converter")
-parser.add_argument('--input_dir', default='/home/roit/bluep2/datasets/mcv5/depth/0xm300_depth', help="Input video file")
+parser.add_argument('--input_dir', default='/home/roit/bluep2/datasets/mcv5videos/0x300_9k', help="Input video file")
 parser.add_argument('--shader',default='')
-parser.add_argument('--output_dir', default="/home/roit/bluep2/datasets/mcv5/depth/0xm300_depth-dirs", help="Output folder. If exists it will be removed")
+parser.add_argument('--output_dir', default="/home/roit/bluep2/datasets/mcv5videos/9k/0x300_9k", help="Output folder. If exists it will be removed")
 parser.add_argument('--videos2frames_log',
                     #default='./videos2frames_log.txt',
                     default=None
@@ -26,7 +26,11 @@ parser.add_argument('--resize',default=False)
 
 def idx2sub_dir(idx,shader,framesPerDir):
     num = int(idx/framesPerDir)
-    return shader+"{:04d}".format(num)
+    if shader:
+        return shader+"{:04d}".format(num)
+    else:
+        return "{:04d}".format(num)
+
 
 def main(args):
     print(args.input_dir)
@@ -44,7 +48,7 @@ def main(args):
     print("--> {} frames".format(len(src_files)))
 
     for idx, file in tqdm(enumerate(src_files)):
-        sub_dir = idx2sub_dir(idx,shader=shader,framesPerDir=args.framesPerDir)
+        sub_dir = idx2sub_dir(idx,shader=None,framesPerDir=args.framesPerDir)
         frame_name = idx%args.framesPerDir
         dst_dir = output_dir/sub_dir
         dst_dir.mkdir_p()

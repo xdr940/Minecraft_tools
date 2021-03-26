@@ -35,11 +35,10 @@
   	   |-..
 ```
 
- - files_restruct.py
+ - files_restruct_*.sh
+ 
+ 这里通过sh文件进行restructuring, * \in (0,8)
 
-mvdirs
-	
-将刚刚得到的dirs按照偏置mv到mcdataset dir中, 并且每个sub dir名字一样, 为shader的名字
 
 
 ```
@@ -66,4 +65,30 @@ mvdirs
 ```
 
 
+
+### steps
+
+ - step1 video 2 frames
+ 
+ 把shader名字 ctrl f 换了然后
+ ```apex
+bash split.sh
+```
+ 
+ - step2 frame 2 dirs
+ 类似的, 吧shader名字换了
+ ```apex
+bash frame2dirs.sh
+```
+
+- step3 dirs send
+
+```apex
+bash files_restruct_0*.sh
+
+bash files_restruct_0*.sh
+...
+
+
+```
 

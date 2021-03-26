@@ -1,7 +1,4 @@
+import re
 
-a = [2,3,4,5,56]
-
-a.pop(0)
-print(a)
-a.append(123)
+a = re.match(r"abcde\d{1,2}","abcde12")
 print(a)
